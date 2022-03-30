@@ -52,14 +52,18 @@ def run():
             #Se agrega el ángulo de la tira, la posición del LED y el color en RGB
             POV_imagedata.append([angle_POV * 10, pos_LED, R, G ,B]) # El ángulo inicia en 0°
 
+    #Acomodar datos para 2 hélices
     first_stripe = POV_imagedata[0:1400]
     second_stripe = POV_imagedata[1400:2800]
     POV_imagedata_final=[]
-    for usher in range(1, int((len(POV_imagedata)/28))+1):
+    stripebase = 0
+    for usher in range(0, int((len(POV_imagedata)/28))):
         for usher4led in range(0, stripe):
-            POV_imagedata_final.append(first_stripe[usher4led*(usher)])
+            POV_imagedata_final.append(first_stripe[usher4led + stripebase])
         for usher4led in range(0, stripe):
-            POV_imagedata_final.append(second_stripe[usher4led*(usher)])
+            second_stripe[usher4led + stripebase][1] = usher4led + 15
+            POV_imagedata_final.append(second_stripe[usher4led + stripebase])
+        stripebase = stripe + stripebase
 
     # Crear y escribir archivo en formato .csv para la imagen convertida
     np.savetxt(name + "_POVimage.csv",   # Archivo de salida
