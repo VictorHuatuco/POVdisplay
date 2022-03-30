@@ -13,11 +13,10 @@ import cv2  # para manipular la imagen
 #   Configuration
 nleds = 28              # Número de LED's
 angleresolution = 1.8   # Ángulo de resolución multiplo de 360
-
+name = "4550"                       # Colocar nombre de la imagen
 #   Main   
 def run():
     # Read image and copy
-    name = "4550"                       # Colocar nombre de la imagen
     imagen = cv2.imread(name + '.png')  # Colocar imagen en la misma carpeta
     imagen_copy = imagen                # Copia de imagen para modificarla
     if imagen is None:
