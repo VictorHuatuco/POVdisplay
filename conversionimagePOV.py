@@ -4,6 +4,7 @@
 """
 
 #   Libraries
+import sys
 import numpy as np
 import csv  # para crear el archivo
 import math # para usar operaciones trigonométricas 
@@ -40,8 +41,8 @@ def run():
         for pos_LED in range(1, stripe + 1, 1):
             # Conversión de polar a cartesiano para extraer 
             # una posición aproximada de la ubicación del LED en cartesiano                     
-            x = stripe - 1 + round(pos_LED *  math.cos(rad_angle_POV))  
-            y = stripe - 1 + round(pos_LED *  math.sin(rad_angle_POV))
+            x = stripe - 1 + round(pos_LED * math.cos(rad_angle_POV))  
+            y = stripe - 1 + round(pos_LED * math.sin(rad_angle_POV))
 
             #Extracción del color de la posición
             R = imagen_copy[x, y][2]
@@ -50,17 +51,22 @@ def run():
 
             #Se agrega el ángulo de la tira, la posición del LED y el color en RGB
             POV_imagedata.append([angle_POV * 10, pos_LED, R, G ,B]) # El ángulo inicia en 0°
-    
+
+    first_stripe = POV_imagedata[0:1400]
+    second_stripe = POV_imagedata[1400:2800]
+    POV_imagedata_final=[]
+    for usher in range(1, int((len(POV_imagedata)/28))+1):
+        for usher4led in range(0, stripe):
+            POV_imagedata_final.append(first_stripe[usher4led*(usher)])
+        for usher4led in range(0, stripe):
+            POV_imagedata_final.append(second_stripe[usher4led*(usher)])
+
     # Crear y escribir archivo en formato .csv para la imagen convertida
-    # file = open(name + "_POVimage.csv", "w", newline='') # Nombre del archivo "POV_image.csv"
-    # spamreader = csv.writer(file)
-    # spamreader.writerow(POV_imagedata)
-    np.savetxt("output.csv",   # Archivo de salida
-           POV_imagedata,        # Trasponemos los datos
+    np.savetxt(name + "_POVimage.csv",   # Archivo de salida
+           POV_imagedata_final,        # Trasponemos los datos
            fmt="%d",       # Usamos números enteros
            delimiter=",")  # Para que sea un CSV de verdad
-    # file.close()
-    
+
     # Confirmación de conversión
     print("Imagen " + name + ".png" " convertida a formato POV")
     print("Nombre del archivo " + name + "_POVimage.csv")
